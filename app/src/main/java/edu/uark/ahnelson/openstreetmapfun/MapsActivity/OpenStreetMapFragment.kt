@@ -23,8 +23,6 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 
-
-
 class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
 
     private lateinit var mMap: MapView
@@ -113,8 +111,6 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
         curLocation = geoPoint
         val mapController = mMap.controller
         mapController.setCenter(curLocation);
-
-
     }
 
     fun addMarker(geoPoint: GeoPoint, id: Int) {
@@ -142,16 +138,20 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
                     mMap.overlays.remove(overlay)
                 }
             }
+
         }
     }
 
     override fun onMarkerClick(marker: Marker?, mapView: MapView?): Boolean {
+        val context = context ?: return true // Return if context is null
+
         marker?.id?.let { Log.d("OpenStreetMapFragment", it)
-//            // Open the TakeShowPictureActivity when a marker is clicked
-//            val intent = Intent(activity, TakeShowPictureActivity::class.java)
-//            startActivity(intent)
+            // Open the TakeShowPictureActivity when a marker is clicked
+            val intent = Intent(context, TakeShowPictureActivity::class.java)
+            intent.putExtra("GEOPHOTO_ID", this.id)
+            //intent.putExtra("MARKER_ID", marker.id)
+            startActivity(intent)
           }
-        Log.d("comment", "Marker Clicked")
         return true
     }
 

@@ -9,5 +9,6 @@ data class Marker(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "latitude") val latitude: Double,
     @ColumnInfo(name = "longitude") val longitude: Double,
-    // @ColumnInfo(name = "photo_path") val photoPath: String
+    @ColumnInfo(name = "image_path") val imagePath: String?,
+    @ColumnInfo(name = "description") val description: String?
 )

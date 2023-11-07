@@ -26,6 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OpenStreetMapFun"
+        android:name=".MarkerApplication"
         tools:targetApi="31" >
         <activity
             android:name=".TakeShowPictureActivity.TakeShowPictureActivity"

@@ -61,7 +61,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-common-java8:2.6.2")
     implementation("androidx.core:core-ktx:X.Y.Z")
-    
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation ("androidx.activity:activity-ktx:1.2.2")
+
+
 
     // Google Play Location Service Component
     implementation("com.google.android.gms:play-services-location:21.0.1")
