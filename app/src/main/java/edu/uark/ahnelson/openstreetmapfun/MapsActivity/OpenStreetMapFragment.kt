@@ -1,5 +1,6 @@
 package edu.uark.ahnelson.openstreetmapfun.MapsActivity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import edu.uark.ahnelson.openstreetmapfun.R
+import edu.uark.ahnelson.openstreetmapfun.TakeShowPictureActivity.TakeShowPictureActivity
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
@@ -97,7 +99,6 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
         val copyrightOverlay = CopyrightOverlay(context)
         copyrightOverlay.setCopyrightNotice(copyrightNotice)
         mMap.getOverlays().add(copyrightOverlay)
-
     }
 
     private fun addMapScaleOverlay() {
@@ -145,7 +146,12 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
     }
 
     override fun onMarkerClick(marker: Marker?, mapView: MapView?): Boolean {
-        marker?.id?.let { Log.d("OpenStreetMapFragment", it) }
+        marker?.id?.let { Log.d("OpenStreetMapFragment", it)
+//            // Open the TakeShowPictureActivity when a marker is clicked
+//            val intent = Intent(activity, TakeShowPictureActivity::class.java)
+//            startActivity(intent)
+          }
+        Log.d("comment", "Marker Clicked")
         return true
     }
 

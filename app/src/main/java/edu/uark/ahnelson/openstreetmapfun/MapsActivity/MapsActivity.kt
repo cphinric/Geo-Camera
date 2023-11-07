@@ -47,18 +47,22 @@ class MapsActivity : AppCompatActivity() {
     //Needed to remove requests for location updates
     private lateinit var mLocationCallback: LocationCallback
 
+
     val takePictureResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result: ActivityResult ->
-        if(result.resultCode == Activity.RESULT_CANCELED){
+        if(result.resultCode == RESULT_CANCELED){
             Log.d("MainActivity","Take Picture Activity Cancelled")
         }else{
             Log.d("MainActivity", "Picture Taken")
+
             val takeShowPictureActivityIntent: Intent = Intent(this,TakeShowPictureActivity::class.java)
             takeShowPictureActivityIntent.putExtra("GEOPHOTO_LOC",
                 result.data?.getStringExtra("GEOPHOTO_LOC"))
             takeShowPictureActivityIntent.putExtra("GEOPHOTO_ID",10)
+            startActivity(takeShowPictureActivityIntent)
             drawMarker(mCurrentLocation)
         }
+
     }
 
     val requestPermissionLauncher = registerForActivityResult(
@@ -96,7 +100,8 @@ class MapsActivity : AppCompatActivity() {
 
         //Get preferences for tile cache
         Configuration.getInstance().load(this, getSharedPreferences(
-            "${packageName}_preferences", Context.MODE_PRIVATE))
+            "${packageName}_preferences", MODE_PRIVATE
+        ))
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         //Check for location permissions
@@ -112,7 +117,6 @@ class MapsActivity : AppCompatActivity() {
                 as OpenStreetMapFragment? ?:OpenStreetMapFragment.newInstance().also{
             replaceFragmentInActivity(it,R.id.fragmentContainerView)
         }
-
     }
 
     private fun takeNewPhoto(){
