@@ -21,6 +21,9 @@ interface MarkerDao {
     @Query("SELECT * FROM marker_table")
     fun getAllMarkers(): Flow<List<Marker>>
 
+    @Query("SELECT * FROM marker_table WHERE id = :markerId")
+    fun getMarkerById(markerId: Int): Marker?
+
     @Query("DELETE FROM marker_table WHERE id = :markerId")
     suspend fun deleteMarkerById(markerId: Int)
 }

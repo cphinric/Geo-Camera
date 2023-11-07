@@ -9,8 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import edu.uark.ahnelson.openstreetmapfun.R
 import edu.uark.ahnelson.openstreetmapfun.TakeShowPictureActivity.TakeShowPictureActivity
+import edu.uark.ahnelson.openstreetmapfun.Util.MarkerDetailActivity
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
@@ -26,6 +29,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
 
     private lateinit var mMap: MapView
+    private val viewModel: MarkerViewModel by viewModels()
     private lateinit var mLocationOverlay: MyLocationNewOverlay
     private lateinit var mCompassOverlay: CompassOverlay
     private var curLocation = GeoPoint(34.74, -92.28)
@@ -145,15 +149,35 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
     override fun onMarkerClick(marker: Marker?, mapView: MapView?): Boolean {
         val context = context ?: return true // Return if context is null
 
-        marker?.id?.let { Log.d("OpenStreetMapFragment", it)
-            // Open the TakeShowPictureActivity when a marker is clicked
-            val intent = Intent(context, TakeShowPictureActivity::class.java)
-            intent.putExtra("GEOPHOTO_ID", this.id)
-            //intent.putExtra("MARKER_ID", marker.id)
-            startActivity(intent)
-          }
+        marker?.id?.let { markerId ->
+            // Observe the LiveData from the ViewModel
+            viewModel.getMarkerDataById(markerId.toInt()).observe(viewLifecycleOwner, Observer { markerData ->
+                // Now you have the marker data, you can display the image and description
+                val intent = Intent(context, MarkerDetailActivity::class.java).apply {
+                    if (markerData != null) {
+                        putExtra("IMAGE_PATH", markerData.imagePath)
+                    }
+                    if (markerData != null) {
+                        putExtra("DESCRIPTION", markerData.description)
+                    }
+                }
+                startActivity(intent)
+            })
+        }
         return true
     }
+//    override fun onMarkerClick(marker: Marker?, mapView: MapView?): Boolean {
+//        val context = context ?: return true // Return if context is null
+//
+//        marker?.id?.let { Log.d("OpenStreetMapFragment", it)
+//            // Open the TakeShowPictureActivity when a marker is clicked
+//            val intent = Intent(context, TakeShowPictureActivity::class.java)
+//            intent.putExtra("GEOPHOTO_ID", this.id)
+//            //intent.putExtra("MARKER_ID", marker.id)
+//            startActivity(intent)
+//          }
+//        return true
+//    }
 
     companion object {
         /**

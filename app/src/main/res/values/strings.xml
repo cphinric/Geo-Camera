@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">OpenStreetMapFun</string>
     <string name="take_new_photo">Take New Photo</string>
+    <string name="marker_image" />
 </resources>

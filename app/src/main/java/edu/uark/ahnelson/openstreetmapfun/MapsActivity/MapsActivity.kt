@@ -27,8 +27,11 @@ import edu.uark.ahnelson.openstreetmapfun.Util.createLocationRequest
 import edu.uark.ahnelson.openstreetmapfun.Util.replaceFragmentInActivity
 import androidx.lifecycle.ViewModelProvider
 import edu.uark.ahnelson.openstreetmapfun.MapsActivity.MarkerViewModel
-import edu.uark.ahnelson.openstreetmapfun.MapsActivity.MarkerViewModelFactory
 import edu.uark.ahnelson.openstreetmapfun.Model.Marker
+import edu.uark.ahnelson.openstreetmapfun.Model.MarkerDatabase
+import edu.uark.ahnelson.openstreetmapfun.Model.MarkerRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 
 
 import org.osmdroid.config.Configuration
@@ -58,6 +61,8 @@ class MapsActivity : AppCompatActivity() {
         MarkerViewModelFactory((application as MarkerApplication).repository)
     }
 
+    private lateinit var viewModel: MarkerViewModel
+
     val takePictureResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result: ActivityResult ->
         if(result.resultCode == RESULT_CANCELED){
@@ -75,11 +80,11 @@ class MapsActivity : AppCompatActivity() {
 
             val imagePath = result.data?.getStringExtra("IMAGE_PATH")
             val description = result.data?.getStringExtra("DESCRIPTION")
-            val deleteMarkerId = result.data?.getIntExtra("DELETE_MARKER_ID", -1)
-            if (deleteMarkerId != null && deleteMarkerId != -1) {
-                // Delete the marker from the database
-                markerViewModel.deleteMarkerById(deleteMarkerId)
-            }
+//            val deleteMarkerId = result.data?.getIntExtra("DELETE_MARKER_ID", -1)
+//            if (deleteMarkerId != null && deleteMarkerId != -1) {
+//                // Delete the marker from the database
+//                markerViewModel.deleteMarkerById(deleteMarkerId)
+//            }
             if (imagePath != null && description != null) {
                 drawMarker(mCurrentLocation, imagePath, description)
                 //startActivity(takeShowPictureActivityIntent)
@@ -113,6 +118,12 @@ class MapsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val applicationScope = CoroutineScope(SupervisorJob())
+
+        // Initialize the repository and ViewModelFactory
+        val markerDao = MarkerDatabase.getDatabase(application, applicationScope).markerDao()
+        val repository = MarkerRepository(markerDao)
+        val viewModelFactory = MarkerViewModel.Factory(repository)
 
         findViewById<FloatingActionButton>(R.id.floatingActionButton).setOnClickListener{
             takeNewPhoto()

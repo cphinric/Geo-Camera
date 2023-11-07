@@ -20,5 +20,10 @@ class MarkerRepository(private val markerDao: MarkerDao) {
     suspend fun deleteMarkerById(markerId: Int) {
         markerDao.deleteMarkerById(markerId)
     }
+
+    fun getMarkerDataById(markerId: Int): Marker? {
+        // This should be called from a background thread, not the main thread
+        return markerDao.getMarkerById(markerId)
+    }
 }
 
