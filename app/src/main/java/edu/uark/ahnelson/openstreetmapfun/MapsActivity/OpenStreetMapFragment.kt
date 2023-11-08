@@ -167,13 +167,12 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
         marker?.id?.let { markerId ->
             // Observe the LiveData from the ViewModel
             viewModel.getMarkerDataById(markerId.toInt()).observe(viewLifecycleOwner, Observer { markerData ->
-                // Now you have the marker data, you can display the image and description
+                // Now you have the marker data, you can display the image, description, and timestamp
                 val intent = Intent(context, MarkerDetailActivity::class.java).apply {
                     if (markerData != null) {
                         putExtra("IMAGE_PATH", markerData.imagePath)
-                    }
-                    if (markerData != null) {
                         putExtra("DESCRIPTION", markerData.description)
+                        putExtra("TIMESTAMP", markerData.timestamp) // Add this line to include the timestamp
                     }
                 }
                 startActivity(intent)
@@ -181,18 +180,6 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
         }
         return true
     }
-//    override fun onMarkerClick(marker: Marker?, mapView: MapView?): Boolean {
-//        val context = context ?: return true // Return if context is null
-//
-//        marker?.id?.let { Log.d("OpenStreetMapFragment", it)
-//            // Open the TakeShowPictureActivity when a marker is clicked
-//            val intent = Intent(context, TakeShowPictureActivity::class.java)
-//            intent.putExtra("GEOPHOTO_ID", this.id)
-//            //intent.putExtra("MARKER_ID", marker.id)
-//            startActivity(intent)
-//          }
-//        return true
-//    }
 
     companion object {
         /**
