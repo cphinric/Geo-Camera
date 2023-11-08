@@ -1,5 +1,7 @@
 package edu.uark.ahnelson.openstreetmapfun.Model
 
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.flow.Flow
 
 class MarkerRepository(private val markerDao: MarkerDao) {
@@ -21,9 +23,10 @@ class MarkerRepository(private val markerDao: MarkerDao) {
         markerDao.deleteMarkerById(markerId)
     }
 
-    fun getMarkerDataById(markerId: Int): Marker? {
+    suspend fun getMarkerDataById(markerId: Int): Marker? {
         // This should be called from a background thread, not the main thread
         return markerDao.getMarkerById(markerId)
     }
 }
+
 

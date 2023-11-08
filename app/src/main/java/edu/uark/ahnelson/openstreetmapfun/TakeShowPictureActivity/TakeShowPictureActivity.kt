@@ -40,7 +40,6 @@ class TakeShowPictureActivity : AppCompatActivity() {
     lateinit var imageView: ImageView
     lateinit var editTextDescription: EditText
     private var geoPhotoId:Int = -1
-    //private var getMarkerId:Int = -1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +51,6 @@ class TakeShowPictureActivity : AppCompatActivity() {
 
         val intent = getIntent()
         geoPhotoId = intent.getIntExtra("GEOPHOTO_ID", -1)
-        //getMarkerId = intent.getIntExtra("MARKER_ID", -1)
 
         if (geoPhotoId == -1) {
             takeAPicture()

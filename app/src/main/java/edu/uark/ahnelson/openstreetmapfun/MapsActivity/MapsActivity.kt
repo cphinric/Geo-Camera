@@ -58,7 +58,7 @@ class MapsActivity : AppCompatActivity() {
     private lateinit var mLocationCallback: LocationCallback
 
     private val markerViewModel: MarkerViewModel by viewModels {
-        MarkerViewModelFactory((application as MarkerApplication).repository)
+        MarkerViewModel.Factory((application as MarkerApplication).repository)
     }
 
     private lateinit var viewModel: MarkerViewModel
@@ -223,7 +223,8 @@ class MapsActivity : AppCompatActivity() {
             latitude = location.latitude,
             longitude = location.longitude,
             imagePath = imagePath,
-            description = description
+            description = description,
+            timestamp = System.currentTimeMillis()
         )
 
         // Insert the new marker into the database

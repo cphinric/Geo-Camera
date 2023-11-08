@@ -11,9 +11,14 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import edu.uark.ahnelson.openstreetmapfun.Model.MarkerDatabase
+import edu.uark.ahnelson.openstreetmapfun.Model.MarkerRepository
 import edu.uark.ahnelson.openstreetmapfun.R
 import edu.uark.ahnelson.openstreetmapfun.TakeShowPictureActivity.TakeShowPictureActivity
 import edu.uark.ahnelson.openstreetmapfun.Util.MarkerDetailActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
@@ -29,11 +34,21 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
 
     private lateinit var mMap: MapView
-    private val viewModel: MarkerViewModel by viewModels()
     private lateinit var mLocationOverlay: MyLocationNewOverlay
     private lateinit var mCompassOverlay: CompassOverlay
     private var curLocation = GeoPoint(34.74, -92.28)
 
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+    private val repository by lazy {
+        val markerDao = MarkerDatabase.getDatabase(requireContext(), applicationScope).markerDao()
+        MarkerRepository(markerDao)
+    }
+
+
+    private val viewModel: MarkerViewModel by viewModels {
+        MarkerViewModel.Factory(repository)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {

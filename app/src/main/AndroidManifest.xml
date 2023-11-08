@@ -40,6 +40,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Util.MarkerDetailActivity">
+            <!-- If you have intent filters, they go here -->
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

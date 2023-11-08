@@ -5,10 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import edu.uark.ahnelson.openstreetmapfun.Model.MarkerRepository
 import edu.uark.ahnelson.openstreetmapfun.Model.Marker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 class MarkerViewModel(private val repository: MarkerRepository) : ViewModel() {
 
     // Factory for creating MarkerViewModel
@@ -40,18 +46,21 @@ class MarkerViewModel(private val repository: MarkerRepository) : ViewModel() {
         repository.deleteMarkerById(markerId)
     }
 
+    fun getFormattedDate(timestamp: Long): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return dateFormat.format(Date(timestamp))
+    }
+
     fun getMarkerDataById(markerId: Int): LiveData<Marker?> {
         val data = MutableLiveData<Marker?>()
 
-        // Assuming you're using coroutines to fetch data asynchronously
-        viewModelScope.launch {
-            // Post the value to LiveData once it's fetched
-            data.postValue(repository.getMarkerDataById(markerId))
+        viewModelScope.launch(Dispatchers.IO) { // Use the IO dispatcher for database operations
+            val markerData = repository.getMarkerDataById(markerId)
+            data.postValue(markerData)
         }
 
         return data
     }
-
 }
 
 
